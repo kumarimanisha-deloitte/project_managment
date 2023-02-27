@@ -34,6 +34,8 @@ namespace project_managment_hu.Services
                 if (issue != null && user != null)
                 {
                     issue.AssigneeId = userId;
+                    issue.UpdateTime = DateTime.UtcNow;
+
 
                     // Save the changes to the database
                     model.Messsage = "Assignee Added Successfully";
@@ -344,6 +346,8 @@ namespace project_managment_hu.Services
 
                 // Update the issue status
                 issuses.Status = newStatus;
+                issuses.UpdateTime = DateTime.UtcNow;
+
                 _context.SaveChanges();
 
                 // _context.Add<Issuses>(issuses);
