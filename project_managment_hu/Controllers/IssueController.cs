@@ -133,10 +133,11 @@ namespace project_managment_hu.Controllers
 
 
 
-        [HttpGet("issues/search")]
+        [HttpGet]
+        [Route("[action]")]
         [Authorize(Roles = "Project_Manager,Admin,Normal")]
 
-        public List<Issuses> SearchIssues(string title, string description)
+        public List<Issuses> SearchIssuesByTittleAndDescription(string title, string description)
         {
             List<Issuses> issuses;
             issuses = _issueService.GetIssuesOnTitleAndDescription(title, description);
