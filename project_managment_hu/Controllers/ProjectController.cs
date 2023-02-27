@@ -147,6 +147,24 @@ namespace project_managment_hu.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("[action]")]
+        // [Authorize(Roles="admin")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
+        public IActionResult GetDetailsAnIssueByProjectId(int projectId, int IssueId)
+        {
+            try
+            {
+                var issueList = projectService.GetDetailsAnIssueByProjectId(projectId,IssueId);
+                if (issueList == null) return NotFound();
+                return Ok(issueList);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
 
     }
 }

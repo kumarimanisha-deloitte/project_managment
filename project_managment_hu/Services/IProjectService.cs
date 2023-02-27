@@ -24,6 +24,8 @@ namespace project_managment_hu.Services
 
         ResponseModel DeleteProjectIssueById(int projectId, int issueId);
 
+        public List<Issuses> GetDetailsAnIssueByProjectId(int projectId,int IssueId);
+
 
 
 

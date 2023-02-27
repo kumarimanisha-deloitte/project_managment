@@ -112,6 +112,28 @@ namespace project_managment_hu.Services
             return model;
         }
 
+        public List<Issuses> GetDetailsAnIssueByProjectId(int projectId, int IssueId)
+        {
+            Issuses issuses;
+            List<Issuses> issuses1;
+
+            try
+            {
+                
+                issuses1 = _context.issuses
+                            .Where(s => s.projectsProjectId == projectId && s.IssueId==IssueId).Include(s=>s.Assignee).ToList();
+                
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return issuses1;
+            
+        }
+
         public List<Issuses> GetIssuesByProjectId(int projectId)
         {
             Issuses issuses;
