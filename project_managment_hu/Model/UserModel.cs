@@ -15,7 +15,9 @@ namespace project_managment_hu.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FullName { get; set; }
-        public string Role { get; set; }
+      //  public string Role { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
+
 
         [JsonIgnore]
         [InverseProperty("Reporter")] 

@@ -25,38 +25,39 @@ namespace project_managment_hu.Controllers
             _userservice= userservice;
 
         }
-        [HttpGet("Admins")]
-        [Authorize(Roles = "Admin")]
-        public IActionResult AdminsEndpoint()
-        {
-            var currentUser = GetCurrentUser();
+        // [HttpGet("Admins")]
+        // [Authorize(Roles = "Admin")]
+        // public IActionResult AdminsEndpoint()
+        // {
+        //     var currentUser = GetCurrentUser();
 
-            return Ok($"Hi {currentUser.FullName}, you are an {currentUser.Role}");
-        }
+        //     return Ok($"Hi {currentUser.FullName}, you are an {currentUser.Role}");
+        // }
 
 
-        [HttpGet("Proect_Manager")]
-        [Authorize(Roles = "Proect_Manager")]
-        public IActionResult SellersEndpoint()
-        {
-            var currentUser = GetCurrentUser();
+        // [HttpGet("Proect_Manager")]
+        // [Authorize(Roles = "Proect_Manager")]
+        // public IActionResult SellersEndpoint()
+        // {
+        //     var currentUser = GetCurrentUser();
 
-            return Ok($"Hi {currentUser.FullName}, you are a {currentUser.Role}");
-        }
+        //     return Ok($"Hi {currentUser.FullName}, you are a {currentUser.Role}");
+        // }
+
+        // [HttpGet("Normal")]
+        // [Authorize(Roles = "Normal")]
+        // public IActionResult AdminsAndSellersEndpoint()
+        // {
+        //     var currentUser = GetCurrentUser();
+
+        //     return Ok($"Hi {currentUser.FullName}, you are an {currentUser.Role}");
+        // }
 
         [HttpGet("Normal")]
-        [Authorize(Roles = "Normal")]
-        public IActionResult AdminsAndSellersEndpoint()
-        {
-            var currentUser = GetCurrentUser();
-
-            return Ok($"Hi {currentUser.FullName}, you are an {currentUser.Role}");
-        }
-
-        [HttpGet("Public")]
+        [Authorize(Roles = "Normal,Admin")]
         public IActionResult Public()
         {
-            return Ok("Hi, you're on public property");
+            return Ok("Hi, you're on normal user area");
         }
 
         private UserModel GetCurrentUser()
@@ -69,17 +70,17 @@ namespace project_managment_hu.Controllers
 
                 return new UserModel
                 {
-                    FullName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
-                    EmailAddress = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                    FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
-                    LastName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
-                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value
+                    //FullName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
+                    //EmailAddress = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
+                    //FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
+                    //LastName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
+                    //UserRoles = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value
                 };
             }
             return null;
         }
         [HttpGet("users")]
-        // [Authorize(Roles="admin")]
+        [Authorize(Roles="Admin")]
         public IActionResult GetAllUsers()
         {
             try
@@ -96,6 +97,8 @@ namespace project_managment_hu.Controllers
 
         [HttpGet]
         [Route("[action]/id")]
+        [Authorize(Roles = "Admin")]
+
         public List<UserModel> GetEmployeeByID(int id)
         {
 
@@ -106,6 +109,8 @@ namespace project_managment_hu.Controllers
 
         [HttpDelete]
         [Route("[action]")]
+        [Authorize(Roles = "Admin")]
+
         public void DeleteEmployeeById(int id)
         {
             _userservice.DeleteEmployee(id);
@@ -114,6 +119,7 @@ namespace project_managment_hu.Controllers
 
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Admin")]
         public IActionResult updateUserDetail(int userId, UserModelDto userModelDto)
         {
             try

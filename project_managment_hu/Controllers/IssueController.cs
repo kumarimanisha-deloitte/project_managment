@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using project_managment_hu.DbContest;
@@ -14,6 +15,8 @@ using project_managment_hu.Services;
 
 namespace project_managment_hu.Controllers
 {
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
+
     [ApiController]
     [Route("api/[controller]")]
     public class IssueController : ControllerBase
@@ -51,6 +54,8 @@ namespace project_managment_hu.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
+
         public IActionResult CreateIssue(IssueDto issueDto)
         {
             try
@@ -66,7 +71,7 @@ namespace project_managment_hu.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        // [Authorize(Roles="admin")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
         public IActionResult GetAllIsssues()
         {
             try
@@ -83,6 +88,8 @@ namespace project_managment_hu.Controllers
 
         [HttpGet]
         [Route("[action]/id")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
+
         public List<Issuses> GetIssueDetailByID(int issueId)
         {
 
@@ -93,7 +100,7 @@ namespace project_managment_hu.Controllers
         // [HttpPut("{id}/update-status")]
         [HttpPut]
         [Route("[action]/id")]
-
+        [Authorize(Roles = "Project_Manager,Admin")]
         public IActionResult UpdateIssueStatus(int issueId)
         {
             try
@@ -109,6 +116,8 @@ namespace project_managment_hu.Controllers
 
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Project_Manager,Admin")]
+
         public IActionResult AssignIssueToUser(int issueId, int userId)
         {
             try
@@ -125,6 +134,8 @@ namespace project_managment_hu.Controllers
 
 
         [HttpGet("issues/search")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
+
         public List<Issuses> SearchIssues(string title, string description)
         {
             List<Issuses> issuses;
@@ -135,6 +146,8 @@ namespace project_managment_hu.Controllers
 
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
+
         public IActionResult updateIssueDetail(int issueId, IssueDto issueDto)
         {
             try
@@ -152,6 +165,8 @@ namespace project_managment_hu.Controllers
 
         [HttpDelete]
         [Route("[action]")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
+
         public IActionResult DeleteIssue(int issueId)
         {
             try
@@ -167,6 +182,7 @@ namespace project_managment_hu.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
 
         public IActionResult GetIssuesForProjectOrAssignee([FromQuery] int projectId, [FromQuery] string assigneeEmail)
         {
@@ -184,7 +200,7 @@ namespace project_managment_hu.Controllers
 
         [HttpGet]
         [Route("[action]")]
-
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
         public IActionResult GetIssuesForProjectAndAssignee([FromQuery] int projectId, [FromQuery] string assigneeEmail)
         {
             try
@@ -201,11 +217,48 @@ namespace project_managment_hu.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
+
         public IActionResult GetIssuesByType([FromQuery] string type)
         {
             try
             {
                 var issues = _issueService.GetIssuesByType(type);
+                if (issues == null) return NotFound();
+                return Ok(issues);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
+
+        public IActionResult GetIssuesGreaterThanCreatedDate(string currentDate)
+        {
+            try
+            {
+                var issues = _issueService.GetIssuesGreaterThanCreatedDate(DateTime.Parse(currentDate));
+                if (issues == null) return NotFound();
+                return Ok(issues);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        [Authorize(Roles = "Project_Manager,Admin,Normal")]
+        public IActionResult GetIssuesLowerThanUpdatedDate(string currentDate)
+        {
+            try
+            {
+                var issues = _issueService.GetIssuesLowerThanUpdatedDate(DateTime.Parse(currentDate));
                 if (issues == null) return NotFound();
                 return Ok(issues);
             }

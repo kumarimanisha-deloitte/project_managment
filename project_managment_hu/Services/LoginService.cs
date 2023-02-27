@@ -27,21 +27,32 @@ namespace project_managment_hu.Services
         }
         public string Generate(UserModel user)
         {
+            UserModel u = _context.userModels.Include(i=>i.UserRoles).ThenInclude(UserRoles=>UserRoles.Role).FirstOrDefault(i=>i.Id==user.Id);
+            List<Claim> claimList= new List<Claim>();
+            if(user.UserRoles == null || user.UserRoles.Count==0)
+            {
+                return "No role added";
+            }
+
+            foreach(var role in u.UserRoles)
+            {
+                claimList.Add(new Claim("roles",role.Role.Name));
+            }
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.FullName),
-                new Claim(ClaimTypes.Email, user.EmailAddress),
-                new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName),
-                new Claim(ClaimTypes.Role, user.Role)
-            };
+            // var claims = new[]
+            // {
+            //     new Claim(ClaimTypes.NameIdentifier, user.FullName),
+            //     new Claim(ClaimTypes.Email, user.EmailAddress),
+            //     new Claim(ClaimTypes.GivenName, user.FirstName),
+            //     new Claim(ClaimTypes.Surname, user.LastName),
+            //   //  new Claim(ClaimTypes.Role, user.Role)
+            // };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
               _config["Jwt:Audience"],
-              claims,
+              claims:claimList,
               expires: DateTime.Now.AddMinutes(15),
               signingCredentials: credentials);
 
@@ -84,7 +95,7 @@ namespace project_managment_hu.Services
                 user.FullName = userModel.FullName;
                 user.LastName = userModel.LastName;
                 user.Password = userModel.Password;
-                user.Role = userModel.Role;
+               // user.Role = userModel.Role;
                 _context.Add(user);
                 model.Messsage = "User Inserted Successfully";
 

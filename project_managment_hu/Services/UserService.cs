@@ -43,7 +43,7 @@ namespace project_managment_hu.Services
             try
             {
                 // emp = _context.Find < Employee > (empId);
-                emp1 = _context.userModels.Include(s => s.projects).Include(s => s.Assignee)
+                emp1 = _context.userModels.Include(s => s.projects).Include(s => s.Assignee).Include(s=>s.UserRoles).ThenInclude(UserRoles=>UserRoles.Role)
                 .Where(s => s.Id == empId).ToList();
 
             }
@@ -75,7 +75,7 @@ namespace project_managment_hu.Services
                     _temp.FullName = userModelDto.FullName;
                     _temp.LastName = userModelDto.LastName;
                     _temp.Password = userModelDto.Password;
-                    _temp.Role = userModelDto.Role;
+                    //_temp.Role = userModelDto.Role;
 
                     _context.Update<UserModelDto>(_temp);
                     model.Messsage = "User Updated Successfully";

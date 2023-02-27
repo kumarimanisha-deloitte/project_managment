@@ -389,10 +389,23 @@ namespace project_managment_hu.Services
 
         public List<Issuses> GetIssuesByType(string type)
         {
-            var issues = _context.issuses.Where(i => i.IssueType == type).ToList();
+            var issues = _context.issuses.Where(i => i.IssueType.ToLower() == type.ToLower()).ToList();
 
             return issues;
 
+        }
+
+        public List<Issuses> GetIssuesGreaterThanCreatedDate(DateTime date)
+        {
+            var issuesList= _context.issuses.Where(d=>DateTime.Compare(date,d.CreateTime)<=0).ToList();
+            return issuesList;
+        }
+
+
+        public List<Issuses> GetIssuesLowerThanUpdatedDate(DateTime date)
+        {
+            var issuesList= _context.issuses.Where(d=>DateTime.Compare(date,d.UpdateTime)>=0).ToList();
+            return issuesList;
         }
     }
 }

@@ -17,6 +17,8 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IIssueService, IssueService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IlabelsService, labelsService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
 
 
 

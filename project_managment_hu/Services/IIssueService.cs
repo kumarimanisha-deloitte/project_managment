@@ -27,6 +27,13 @@ namespace project_managment_hu.Services
 
         public List<Issuses> GetIssuesByType(string type);
 
+        public List<Issuses> GetIssuesGreaterThanCreatedDate(DateTime d);
+
+        public List<Issuses> GetIssuesLowerThanUpdatedDate(DateTime d);
+
+
+
+
 
 
 
