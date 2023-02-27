@@ -19,39 +19,17 @@ namespace project_managment_hu.Controllers
     {
 
          IUserService _userservice;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userservice)
+
+        public UserController(IUserService userservice,ILogger<UserController> logger)
         {
             _userservice= userservice;
+            _logger = logger;
+
 
         }
-        // [HttpGet("Admins")]
-        // [Authorize(Roles = "Admin")]
-        // public IActionResult AdminsEndpoint()
-        // {
-        //     var currentUser = GetCurrentUser();
-
-        //     return Ok($"Hi {currentUser.FullName}, you are an {currentUser.Role}");
-        // }
-
-
-        // [HttpGet("Proect_Manager")]
-        // [Authorize(Roles = "Proect_Manager")]
-        // public IActionResult SellersEndpoint()
-        // {
-        //     var currentUser = GetCurrentUser();
-
-        //     return Ok($"Hi {currentUser.FullName}, you are a {currentUser.Role}");
-        // }
-
-        // [HttpGet("Normal")]
-        // [Authorize(Roles = "Normal")]
-        // public IActionResult AdminsAndSellersEndpoint()
-        // {
-        //     var currentUser = GetCurrentUser();
-
-        //     return Ok($"Hi {currentUser.FullName}, you are an {currentUser.Role}");
-        // }
+       
 
         [HttpGet("Normal")]
         [Authorize(Roles = "Normal,Admin")]
@@ -79,7 +57,8 @@ namespace project_managment_hu.Controllers
             }
             return null;
         }
-        [HttpGet("users")]
+        [HttpGet]
+        [Route("[action]")]
         [Authorize(Roles="Admin")]
         public IActionResult GetAllUsers()
         {
@@ -87,6 +66,7 @@ namespace project_managment_hu.Controllers
             {
                 var employees = _userservice.GetUserList();
                 if (employees == null) return NotFound();
+                _logger.LogInformation("This is my log message all user list");
                 return Ok(employees);
             }
             catch (Exception e)
