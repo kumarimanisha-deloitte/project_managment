@@ -9,14 +9,23 @@ namespace project_managment_hu.Services
 {
     public interface IProjectService
     {
-    ResponseModel ProjectCreate(ProjectDto projectDto);
+        ResponseModel ProjectCreate(ProjectDto projectDto);
 
-    public List<Projects> GetProjectDetailsById(int projectId);
+        public List<Projects> GetProjectDetailsById(int projectId);
 
-    public List<Projects> GetProjectList();
+        public List<Projects> GetProjectList();
 
-    ResponseModel ProjectDetailsUpdate(int id,ProjectDto projectDto);
-    ResponseModel DeleteProject(int projectId);
+        ResponseModel ProjectDetailsUpdate(int id, ProjectDto projectDto);
+        ResponseModel DeleteProject(int projectId);
+
+        public List<Issuses> GetIssuesByProjectId(int projectId);
+
+        ResponseModel CreateIssueProjectId(int projectId, IssueDto issueDto);
+
+        ResponseModel DeleteProjectIssueById(int projectId, int issueId);
+
+
+
 
     }
 }

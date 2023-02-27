@@ -14,27 +14,26 @@ namespace project_managment_hu.DbContest
 
         public DbSet<Issuses> issuses { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        public DbSet<labels> labels { get; set; }
+        public DbSet<IssueLabel> IssueLabels { get; set; }
 
-            modelBuilder.Entity<Issuses>()
-                .HasOne(i => i.Assignee)
-                .WithMany(u => u.AssignedIssues)
-                .HasForeignKey(i => i.AssigneeId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
-        public override int SaveChanges()
-        {
-            var currentTime = DateTime.UtcNow;
-            foreach (var entry in ChangeTracker.Entries()
-                .Where(e => e.Entity is Issuses && (e.State == EntityState.Added)))
-            {
-                ((Issuses)entry.Entity).CreateTime = currentTime;
-                ((Issuses)entry.Entity).UpdateTime = currentTime;
-            }
 
-            return base.SaveChanges();
-        }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<IssueLabel>()
+            .HasKey(il => new { il.IssueId, il.LabelId });
+
+        modelBuilder.Entity<IssueLabel>()
+            .HasOne(il => il.Issue)
+            .WithMany(i => i.IssueLabels)
+            .HasForeignKey(il => il.IssueId);
+
+        modelBuilder.Entity<IssueLabel>()
+            .HasOne(il => il.Label)
+            .WithMany(l => l.IssueLabels)
+            .HasForeignKey(il => il.LabelId);
+    }
 
 
 

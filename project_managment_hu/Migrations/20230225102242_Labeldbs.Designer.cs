@@ -11,8 +11,8 @@ using project_managment_hu.DbContest;
 namespace project_managment_hu.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20230222173846_ProjectModel")]
-    partial class ProjectModel
+    [Migration("20230225102242_Labeldbs")]
+    partial class Labeldbs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,13 +21,28 @@ namespace project_managment_hu.Migrations
                 .HasAnnotation("ProductVersion", "6.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("Issuseslabels", b =>
+                {
+                    b.Property<int>("issusesIssueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("labelslabelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("issusesIssueId", "labelslabelId");
+
+                    b.HasIndex("labelslabelId");
+
+                    b.ToTable("Issuseslabels");
+                });
+
             modelBuilder.Entity("project_managment_hu.Model.Issuses", b =>
                 {
                     b.Property<int>("IssueId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("AssigneeId")
+                    b.Property<int?>("AssigneeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateTime")
@@ -55,9 +70,6 @@ namespace project_managment_hu.Migrations
                     b.Property<DateTime>("UpdateTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("projectId")
-                        .HasColumnType("int");
-
                     b.Property<int>("projectsProjectId")
                         .HasColumnType("int");
 
@@ -65,11 +77,27 @@ namespace project_managment_hu.Migrations
 
                     b.HasIndex("AssigneeId");
 
-                    b.HasIndex("ReporterId");
+                    b.HasIndex("ReporterId")
+                        .IsUnique();
 
                     b.HasIndex("projectsProjectId");
 
                     b.ToTable("issuses");
+                });
+
+            modelBuilder.Entity("project_managment_hu.Model.labels", b =>
+                {
+                    b.Property<int>("labelId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("labelId");
+
+                    b.ToTable("labels");
                 });
 
             modelBuilder.Entity("project_managment_hu.Model.Projects", b =>
@@ -127,17 +155,30 @@ namespace project_managment_hu.Migrations
                     b.ToTable("userModels");
                 });
 
+            modelBuilder.Entity("Issuseslabels", b =>
+                {
+                    b.HasOne("project_managment_hu.Model.Issuses", null)
+                        .WithMany()
+                        .HasForeignKey("issusesIssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("project_managment_hu.Model.labels", null)
+                        .WithMany()
+                        .HasForeignKey("labelslabelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("project_managment_hu.Model.Issuses", b =>
                 {
                     b.HasOne("project_managment_hu.Model.UserModel", "Assignee")
-                        .WithMany("AssignedIssues")
-                        .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("Assignee")
+                        .HasForeignKey("AssigneeId");
 
                     b.HasOne("project_managment_hu.Model.UserModel", "Reporter")
-                        .WithMany()
-                        .HasForeignKey("ReporterId")
+                        .WithOne("Reporter")
+                        .HasForeignKey("project_managment_hu.Model.Issuses", "ReporterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -172,7 +213,10 @@ namespace project_managment_hu.Migrations
 
             modelBuilder.Entity("project_managment_hu.Model.UserModel", b =>
                 {
-                    b.Navigation("AssignedIssues");
+                    b.Navigation("Assignee");
+
+                    b.Navigation("Reporter")
+                        .IsRequired();
 
                     b.Navigation("projects");
                 });

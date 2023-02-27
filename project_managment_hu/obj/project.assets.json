@@ -3014,11 +3014,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\kumanisha\\Desktop\\HU_NET\\project_managment\\project_managment_hu\\project_managment_hu.csproj",
+      "projectUniqueName": "C:\\Users\\kumanisha\\Desktop\\HU_NET\\project_managment\\project_managment_hu\\project_managment_hu.csproj",
       "projectName": "project_managment_hu",
-      "projectPath": "c:\\Users\\kumanisha\\Desktop\\HU_NET\\project_managment\\project_managment_hu\\project_managment_hu.csproj",
+      "projectPath": "C:\\Users\\kumanisha\\Desktop\\HU_NET\\project_managment\\project_managment_hu\\project_managment_hu.csproj",
       "packagesPath": "C:\\Users\\kumanisha\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\kumanisha\\Desktop\\HU_NET\\project_managment\\project_managment_hu\\obj\\",
+      "outputPath": "C:\\Users\\kumanisha\\Desktop\\HU_NET\\project_managment\\project_managment_hu\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\kumanisha\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3115,7 +3115,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.405\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -59,6 +59,14 @@ namespace project_managment_hu.Controllers
             return projectService.GetProjectDetailsById(projectId);
             // return  emp;
         }
+        [HttpGet]
+        [Route("[action]/id")]
+        public List<Issuses> GetIssuesByProjectId(int projectId)
+        {
+
+            return projectService.GetIssuesByProjectId(projectId);
+            // return  emp;
+        }
 
 
         [HttpDelete]
@@ -91,6 +99,37 @@ namespace project_managment_hu.Controllers
                 return BadRequest();
             }
 
+        }
+         [HttpPost]
+        [Route("[action]")]
+        public IActionResult CreateIssueProjectId(int projectId, IssueDto issueDto)
+        {
+            try
+            {
+                var model = projectService.CreateIssueProjectId(projectId, issueDto);
+                return Ok(model);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+        }
+
+        [HttpDelete]
+        [Route("[action]")]
+        public IActionResult DeleteProjectIssueById(int peojectId,int issueId)
+        {
+            try
+            {
+                var model = projectService.DeleteProjectIssueById(peojectId,issueId);
+                return Ok(model);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
 

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using project_managment_hu.DbContest;
@@ -10,9 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration["ConnectionString:ProjectManagmentDB"];//connection string from appsetting.json
 builder.Services.AddDbContext<UserContext>(opts =>
                                                  opts.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+                                                 
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IIssueService, IssueService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IlabelsService, labelsService>();
+
+
 
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>

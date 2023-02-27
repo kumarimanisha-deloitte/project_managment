@@ -45,7 +45,7 @@ namespace project_managment_hu.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-                [Route("[action]")]
+        [Route("[action]")]
 
         public string Login([FromBody] UserLogin userLogin)
         {
@@ -54,56 +54,6 @@ namespace project_managment_hu.Controllers
         }
 
 
-        [HttpGet("users")]
-        // [Authorize(Roles="admin")]
-        public IActionResult GetAllUsers()
-        {
-            try
-            {
-                var employees = _loginservice.GetUserList();
-                if (employees == null) return NotFound();
-                return Ok(employees);
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet]
-        [Route("[action]/id")]
-        public List<UserModel> GetEmployeeByID(int id)
-        {
-
-            return _loginservice.GetUserDetailsById(id);
-            // return  emp;
-        }
-
-
-        [HttpDelete]
-        [Route("[action]")]
-        public void DeleteEmployeeById(int id)
-        {
-            _loginservice.DeleteEmployee(id);
-
-        }
-
-         [HttpPut]
-        [Route("[action]")]
-        public IActionResult updateUserDetail(int userId, UserModelDto userModelDto)
-        {
-            try
-            {
-                var model = _loginservice.UserDetailsUpdate(userId,userModelDto);
-                return Ok(model);
-
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-
-        }
 
 
     }

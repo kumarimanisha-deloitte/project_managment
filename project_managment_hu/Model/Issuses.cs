@@ -21,10 +21,15 @@ namespace project_managment_hu.Model
 
         public int ReporterId { get; set; }
         public UserModel Reporter { get; set; }
-        public int AssigneeId { get; set; }
-        public UserModel Assignee { get; set; }
+        public int? AssigneeId { get; set; }
+        public UserModel? Assignee { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime UpdateTime { get; set; }
+
+        //public List<labels> labels { get; set; }
+        public ICollection<IssueLabel> IssueLabels { get; set; }
+
+
         // public DateTime CreatedDate { get; set; }
         // public DateTime ModifiedDate { get; set; }
 

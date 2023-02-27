@@ -6,11 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace project_managment_hu.Migrations
 {
-    public partial class ProjectModel : Migration
+    public partial class Labeldbs : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "labels",
+                columns: table => new
+                {
+                    labelId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_labels", x => x.labelId);
+                })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -74,10 +89,9 @@ namespace project_managment_hu.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    projectId = table.Column<int>(type: "int", nullable: false),
                     projectsProjectId = table.Column<int>(type: "int", nullable: false),
                     ReporterId = table.Column<int>(type: "int", nullable: false),
-                    AssigneeId = table.Column<int>(type: "int", nullable: false),
+                    AssigneeId = table.Column<int>(type: "int", nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -94,13 +108,37 @@ namespace project_managment_hu.Migrations
                         name: "FK_issuses_userModels_AssigneeId",
                         column: x => x.AssigneeId,
                         principalTable: "userModels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_issuses_userModels_ReporterId",
                         column: x => x.ReporterId,
                         principalTable: "userModels",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Issuseslabels",
+                columns: table => new
+                {
+                    issusesIssueId = table.Column<int>(type: "int", nullable: false),
+                    labelslabelId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Issuseslabels", x => new { x.issusesIssueId, x.labelslabelId });
+                    table.ForeignKey(
+                        name: "FK_Issuseslabels_issuses_issusesIssueId",
+                        column: x => x.issusesIssueId,
+                        principalTable: "issuses",
+                        principalColumn: "IssueId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Issuseslabels_labels_labelslabelId",
+                        column: x => x.labelslabelId,
+                        principalTable: "labels",
+                        principalColumn: "labelId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -118,7 +156,13 @@ namespace project_managment_hu.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_issuses_ReporterId",
                 table: "issuses",
-                column: "ReporterId");
+                column: "ReporterId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Issuseslabels_labelslabelId",
+                table: "Issuseslabels",
+                column: "labelslabelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_projects_project_createrId",
@@ -129,7 +173,13 @@ namespace project_managment_hu.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Issuseslabels");
+
+            migrationBuilder.DropTable(
                 name: "issuses");
+
+            migrationBuilder.DropTable(
+                name: "labels");
 
             migrationBuilder.DropTable(
                 name: "projects");

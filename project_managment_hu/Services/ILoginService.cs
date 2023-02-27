@@ -13,15 +13,10 @@ namespace project_managment_hu.Services
 
         public string Login(UserLogin userLogin);
         public string Generate(UserModel user);
-        public bool PasswordVerify(UserModel userModel,UserLogin userLogin);
+        public bool PasswordVerify(UserModel userModel, UserLogin userLogin);
         public bool userExists(string EmailAddress);
 
-        public List<UserModel> GetUserList();
-        public List<UserModel> GetUserDetailsById(int empId);
-
-        void DeleteEmployee(int id);
-        ResponseModel UserDetailsUpdate(int id,UserModelDto userModelDto);
-
+       
 
 
 
