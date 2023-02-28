@@ -17,9 +17,12 @@ namespace project_managment_hu.Controllers
     public class labelsController : ControllerBase
     {
         IlabelsService _labelsService;
-        public labelsController(IlabelsService labelsService)
+        private readonly ILogger<labelsController> _logger;
+
+        public labelsController(IlabelsService labelsService,ILogger<labelsController> logger)
         {
             _labelsService= labelsService;
+            _logger=logger;
         }
 
         [HttpPost]
@@ -29,8 +32,15 @@ namespace project_managment_hu.Controllers
         {
             try
             {
+                if (ModelState.IsValid){
+
                 var model = _labelsService.CreateLabel(labelsDto);
                 return Ok(model);
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
            }
             catch (Exception)
             {

@@ -11,6 +11,7 @@ namespace project_managment_hu.Model
     {
         [Key]
         public int ProjectId { get; set; }
+        [StringLength(500, ErrorMessage = "The Description field cannot exceed 500 characters.")]
         public string project_description { get; set; }
 
 

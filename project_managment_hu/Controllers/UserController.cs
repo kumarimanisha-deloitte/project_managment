@@ -71,6 +71,7 @@ namespace project_managment_hu.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e, "This is my error log message with an exception.");
                 return BadRequest();
             }
         }
@@ -81,7 +82,7 @@ namespace project_managment_hu.Controllers
 
         public List<UserModel> GetEmployeeByID(int id)
         {
-
+            
             return _userservice.GetUserDetailsById(id);
             // return  emp;
         }
@@ -105,11 +106,13 @@ namespace project_managment_hu.Controllers
             try
             {
                 var model = _userservice.UserDetailsUpdate(userId,userModelDto);
+                _logger.LogInformation("This is my log message all update user");
                 return Ok(model);
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "This is my error log message with an exception.");
                 return BadRequest();
             }
 

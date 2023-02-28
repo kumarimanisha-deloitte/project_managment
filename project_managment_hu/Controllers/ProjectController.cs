@@ -17,9 +17,12 @@ namespace project_managment_hu.Controllers
     public class ProjectController : ControllerBase
     {
         IProjectService projectService;
-        public ProjectController(IProjectService _projectService)
+        private readonly ILogger<ProjectController> _logger;
+
+        public ProjectController(IProjectService _projectService,ILogger<ProjectController> logger)
         {
             projectService = _projectService;
+            _logger=logger;
         }
 
         [HttpPost]
@@ -29,11 +32,19 @@ namespace project_managment_hu.Controllers
         {
             try
             {
+                if (ModelState.IsValid){
+
                 var model = projectService.ProjectCreate(projecttDto);
                 return Ok(model);
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "This is my error log message with an exception.");
                 return BadRequest();
             }
         }
@@ -52,6 +63,7 @@ namespace project_managment_hu.Controllers
             }
             catch (Exception e)
             {
+                 _logger.LogError(e, "This is my error log message with an exception.");
                 return BadRequest();
             }
         }
@@ -88,8 +100,9 @@ namespace project_managment_hu.Controllers
                 var model = projectService.DeleteProject(peojectId);
                 return Ok(model);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "This is my error log message with an exception.");
                 return BadRequest();
             }
         }
@@ -102,12 +115,19 @@ namespace project_managment_hu.Controllers
         {
             try
             {
+                if (ModelState.IsValid){
                 var model = projectService.ProjectDetailsUpdate(projectId, projectDto);
                 return Ok(model);
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "This is my error log message with an exception.");
                 return BadRequest();
             }
 
@@ -120,8 +140,17 @@ namespace project_managment_hu.Controllers
         {
             try
             {
+                if (ModelState.IsValid){
+
                 var model = projectService.CreateIssueProjectId(projectId, issueDto);
                 return Ok(model);
+
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+
+                }
 
             }
             catch (Exception)

@@ -16,9 +16,12 @@ namespace project_managment_hu.Controllers
     public class RoleController:ControllerBase
     {
           IRoleService _roleService;
-        public RoleController(IRoleService roleService)
+          private readonly ILogger<RoleController> _logger;
+
+        public RoleController(IRoleService roleService,ILogger<RoleController> logger)
         {
             _roleService= roleService;
+            _logger=logger;
         }
 
         [HttpPost]
@@ -29,11 +32,19 @@ namespace project_managment_hu.Controllers
         {
             try
             {
+                 if (ModelState.IsValid){
                 var model = _roleService.CreateRole(roleDto);
                 return Ok(model);
+                 }
+                 else
+                 {
+                    return BadRequest(ModelState);
+
+                 }
            }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "This is my error log message with an exception.");
                 return NotFound();
             }
         }
@@ -51,6 +62,7 @@ namespace project_managment_hu.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e, "This is my error log message with an exception.");
                 return BadRequest();
             }
         }
@@ -63,12 +75,13 @@ namespace project_managment_hu.Controllers
         {
             try
             {
-                var model = _roleService.AddRoleToUser(RoleId, RoleId);
+                var model = _roleService.AddRoleToUser(RoleId, UserId);
                 return Ok(model);
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "This is my error log message with an exception.");
                 return BadRequest();
             }
 

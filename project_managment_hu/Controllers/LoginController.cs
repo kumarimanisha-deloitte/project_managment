@@ -20,10 +20,12 @@ namespace project_managment_hu.Controllers
     public class LoginController : ControllerBase
     {
         ILoginService _loginservice;
+        private readonly ILogger<LoginController> _logger;
 
-        public LoginController(ILoginService loginservice)
+        public LoginController(ILoginService loginservice,ILogger<LoginController> logger)
         {
             _loginservice = loginservice;
+            _logger=logger;
 
         }
         [AllowAnonymous]
@@ -34,12 +36,21 @@ namespace project_managment_hu.Controllers
 
             try
             {
+                if (ModelState.IsValid){
                 var model = _loginservice.Register(userModel);
                 return Ok(model);
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
+               // return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
+                _logger.LogError(e, "This is my error log message with an exception.");
+
             }
         }
 

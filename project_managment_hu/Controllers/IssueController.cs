@@ -24,34 +24,18 @@ namespace project_managment_hu.Controllers
         UserContext _context;
         IIssueService _issueService;
         IProjectService _projectService;
-        public IssueController(IIssueService issueService, IProjectService projectService, UserContext context
+        private readonly ILogger<IssueController> _logger;
+
+        public IssueController(IIssueService issueService, IProjectService projectService, UserContext context,ILogger<IssueController> logger
 )
         {
             _issueService = issueService;
             _projectService = projectService;
             _context = context;
+            _logger=logger;
 
         }
-      //  [HttpGet]
-
-        // public IActionResult GetIssues([FromQuery] string dsql)
-        // {
-        //     IQueryable<Issuses> query = _context.issuses.Include(i => i.projects).Include(i => i.Assignee).Include(i => i.IssueLabels);
-
-        //     if (!string.IsNullOrEmpty(dsql))
-        //     {
-        //         var parser = new SearchQueryParser();
-        //         var expression = parser.Parse(dsql);
-
-        //         query = query.Where(expression);
-        //     }
-
-        //     var issues = query.ToList();
-
-        //     return Ok(issues);
-        // }
-
-
+     
         [HttpPost]
         [Route("[action]")]
         [Authorize(Roles = "Project_Manager,Admin,Normal")]
@@ -60,12 +44,21 @@ namespace project_managment_hu.Controllers
         {
             try
             {
+                if (ModelState.IsValid){
                 var model = _issueService.IssueCreate(issueDto);
                 return Ok(model);
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                 _logger.LogError(e, "This is my error log message with an exception.");
+
                 return BadRequest();
+                
             }
         }
 
